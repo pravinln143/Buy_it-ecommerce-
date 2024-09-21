@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+        }
+        .header {
+            background-color: #ff9900;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+        .banner {
+            text-align: center;
+            padding: 10px;
+        }
+        .banner img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .content h1 {
+            color: #333333;
+        }
+        .content p {
+            color: #555555;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button {
+            background-color: #ff9900;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999999;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+           BUY IT| Get Discount on your favorite products
+        </div>
+        <div class="banner">
+            <img src="" alt="Buy IT">
+        </div>
+        <div class="content">
+            <h1>Thank you for your purchase, {{ order.first_name }}!</h1>
+            <p>Your order has been confirmed and is being processed.</p>
+            <p>We will send you another email once your order is shipped.</p>
+            <p>Total Amount: Rs{{ order.total_amount }}</p>
+            <a href="https://yourwebsite.com/orders/{{ order.id }}" class="button">View Your Order</a>
+        </div>
+        <div class="footer">
+            <p>Your Company, All rights reserved.</p>
+        </div>
+        <div class="button-container">
+            <a href="" class="button">View All Deals</a>
+        </div>
+    </div>
+</body>
+</html>

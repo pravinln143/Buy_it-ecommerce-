@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card bg-white p-4" style="border-radius: 8px;">
+                <h2 class="mb-4 text-dark text-center" style="font-family: 'Segoe UI', sans-serif;">Express Checkout</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="email" style="font-family: 'Segoe UI', sans-serif; color: black;">Email:</label>
+                        <input type="email" id="email" name="email" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="first_name" style="font-family: 'Segoe UI', sans-serif; color: black;">First Name:</label>
+                        <input type="text" id="first_name" name="first_name" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name" style="font-family: 'Segoe UI', sans-serif; color: black;">Last Name:</label>
+                        <input type="text" id="last_name" name="last_name" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address" style="font-family: 'Segoe UI', sans-serif; color: black;">Address:</label>
+                        <textarea id="address" name="address" class="form-control" required style="font-family: 'Segoe UI', sans-serif;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address_2" style="font-family: 'Segoe UI', sans-serif; color: black;">Address 2:</label>
+                        <textarea id="address_2" name="address_2" class="form-control" style="font-family: 'Segoe UI', sans-serif;"></textarea>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="city" style="font-family: 'Segoe UI', sans-serif; color: black;">City:</label>
+                            <input type="text" id="city" name="city" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="state" style="font-family: 'Segoe UI', sans-serif; color: black;">State:</label>
+                            <input type="text" id="state" name="state" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label for="zipcode" style="font-family: 'Segoe UI', sans-serif; color: black;">Zipcode:</label>
+                            <input type="text" id="zipcode" name="zipcode" class="form-control" required style="font-family: 'Segoe UI', sans-serif;">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" style="font-family: 'Segoe UI', sans-serif; color: black;">Phone:</label>
+                            <input type="text" id="phone" name="phone" class="form-control" style="font-family: 'Segoe UI', sans-serif;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="font-family: 'Segoe UI', sans-serif;">Proceed to Checkout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>About Us</title>
+  <meta name="description" content="Learn more about us and our mission">
+  <meta name="keywords" content="about us, company, team">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #000; /* Black background color */
+      color: #fff; /* White text color for the body */
+    }
+
+    .about-section {
+      padding: 60px 0;
+    }
+
+    .about-section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      color: #fff; /* White text color for the heading */
+      margin-bottom: 30px;
+    }
+
+    .about-section p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+      color: #fff; /* White text color for paragraph */
+      line-height: 1.6;
+    }
+
+    .team-member {
+      margin-bottom: 30px;
+    }
+
+    .team-member img {
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .team-member h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      color: #fff; /* White text color for team member name */
+      margin-top: 10px;
+    }
+
+    .team-member p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.9rem;
+      color: #fff; /* White text color for team member role */
+    }
+
+    .contact-info {
+      margin-top: 40px;
+      padding: 20px;
+      background-color: #333; /* Dark card background */
+      border-radius: 5px;
+      color: #fff; /* White text color inside card */
+    }
+
+    .contact-info h4 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #fff; /* White text color for the contact header */
+    }
+
+    .contact-info p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1rem;
+      color: #fff; /* White text color for contact details */
+    }
+  </style>
+</head>
+
+<body>
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="img-fluid">
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a class="nav-link scrollto" href="{% url 'index' %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'about' %}">About</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'order_history' %}">Your Orders</a></li>
+
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li style="color: white;">{{ user.username }}</li>
+          {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+
+          <button type="button" class="nav-link scrollto bg-success p-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true">
+           Your Cart <span id="cart"></span>
+          </button>
+          <li><a class="nav-link scrollto bg-danger p-2" href="/">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container about-section">
+      <div class="text-center">
+        <h2>About Us</h2>
+        <p>Welcome to BUY IT! We are dedicated to providing the best products and services to our customers. Our mission is to deliver exceptional quality and value through our diverse range of products and customer-centric approach.</p>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h3>Our Mission</h3>
+            <p>At BUY IT our mission is to revolutionize the industry by offering innovative products that enhance the lives of our customers. We are committed to sustainability, quality, and continuous improvement to ensure that our customers receive nothing but the best.</p>
+          </div>
+          <div class="col-lg-6">
+            <h3>Meet the Team</h3>
+            <div class="team-member">
+              <img src="{% static 'assets/img/team/team-4.jpg' %}" alt="Team Member 1">
+              <h4>John Doe</h4>
+              <p>Founder & CEO</p>
+            </div>
+            <div class="team-member">
+              <img src="{% static 'assets/img/team/team-2.jpg' %}" alt="Team Member 2">
+              <h4>Jane Smith</h4>
+              <p>Chief Operating Officer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <h4>Contact Us</h4>
+          <p>If you have any questions or need assistance, feel free to reach out to us:</p>
+          <p><strong>Address:</strong> 1234 Elm Street, Suite 567, Anytown, USA</p>
+          <p><strong>Phone:</strong> +91 9372444176</p>
+          <p><strong>Email:</strong> buyit2763@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <!-- Footer content -->
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>

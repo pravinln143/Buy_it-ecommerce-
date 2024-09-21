@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Your Cart</title>
+  <meta name="description" content="Ecommerce website, we deliver products">
+  <meta name="keywords" content="amazon, flipkart, selling, products">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: #000; /* Black background */
+      color: #fff;
+    }
+
+    .table {
+      background-color: #fff; /* White table background */
+      color: #000; /* Black text inside table */
+      border-radius: 10px;
+    }
+
+    /* Stylish heading for "Your Orders" */
+    .stylish-heading {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 3rem;
+      color: #f0f0f0;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      margin-bottom: 20px;
+    }
+
+    /* Table customization */
+    table.table {
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 18px;
+      text-align: left;
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table.table th, table.table td {
+      padding: 12px;
+    }
+
+    table.table th {
+      background-color: #333;
+      color: #fff;
+    }
+
+    table.table td img {
+      border-radius: 5px;
+    }
+
+    .table-bordered {
+      border: 2px solid #333;
+    }
+  </style>
+</head>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="img-fluid">
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+          <li><a class="nav-link scrollto" href="/">About</a></li>
+          
+          <li><a class="nav-link scrollto" href="{% url 'order_history' %}">Your Orders</a></li>
+          
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li style="color: white;">{{ user.username }}</li>
+          {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+          
+          <button type="button" class="nav-link scrollto bg-success p-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true">
+           Your Cart <span id="cart"></span>
+          </button>
+          <li><a class="nav-link scrollto bg-danger p-2" href="/">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container mt-5">
+      <div class="text-center">
+        <h1 class="stylish-heading">Your Orders</h1>
+      </div>
+
+      <div class="cart-summary text-center">
+        {% if orders %}
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Image</th>
+                <th>Total Price</th>
+                <th>Payment Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+                {% for item in order.items.all %}
+                  <tr>
+                    {% if forloop.first %}
+                      <td rowspan="{{ order.items.count }}">{{ order.id }}</td>
+                    {% endif %}
+                    <td>{{ item.product.name }}</td>
+                    <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="100"></td>
+                    {% if forloop.first %}
+                      <td rowspan="{{ order.items.count }}">{{ order.total_amount }}</td>
+                      <td rowspan="{{ order.items.count }}">{{ order.payment_status }}</td>
+                      <td rowspan="{{ order.items.count }}">{{ order.created_at|date:"M d, Y, h:i A" }}</td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No orders found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+    <!-- Footer content -->
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+  
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+</body>
+
+</html>

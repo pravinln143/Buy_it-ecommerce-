@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title> Your Cart</title>
+  <meta name="description" content="Ecommerce website, we deliver products">
+  <meta name="keywords" content="amazon, flipkart, selling, products">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: #1a1a1a; /* Dark background */
+      color: white; /* Text color for better contrast */
+    
+      background-size: cover; /* Cover the entire viewport */
+      background-position: center; /* Center the image */
+      background-attachment: fixed; /* Fix the image in place */
+    }
+    h1, h4 {
+      font-family: 'Poppins', sans-serif;
+    }
+    .cart-summary {
+      font-size: 1.5rem; /* Stylish font size */
+      font-weight: 500;
+      margin: 2rem 0;
+    }
+    .display-4 {
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add shadow to title */
+    }
+    table th, table td {
+      color: Black; /* Ensure the table text is readable */
+    }
+    table thead {
+      background-color: white; /* Darker header for the table */
+    }
+    .btn-warning {
+      background-color: #ffc107; /* Bootstrap warning button for quantity update */
+      border: none;
+    }
+    .btn-danger {
+      background-color: #dc3545; /* Bootstrap danger button for remove */
+      border: none;
+    }
+  </style>
+  
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+      <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="Logo" class="img-fluid">
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'index' %}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{% url 'about' %}">About</a></li>
+ 
+          <li><a class="nav-link scrollto" href="{% url 'order_history' %}"> Your Orders</a></li>
+
+          {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}">Logout</a></li>
+    <li style="color: white;">{{ user.username }}</li>
+          {% else %}
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+          
+          <button type="button" class="nav-link scrollto bg-success p-2" id="popcart" data-container="body" data-toggle="popover" data-placement="bottom" data-html="true">
+           Your Cart <span id="cart"></span>
+          </button>
+          <li><a class="nav-link scrollto bg-danger p-2" href="/">Contact</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+<main class="main">
+  <div class="container mt-5">
+    <div class="text-center">
+      <h1 class="display-4 mb-4">Your Cart</h1>
+    </div>
+
+    <div class="cart-summary text-center">
+      <!-- Total Items and Total Price in center -->
+      {% if cart_items %}
+      <p style="color:  white;" ><strong>Total Items:</strong> {{ total_items }}</p>
+      <h4 style="color:  white;"><strong>Total Price:</strong> Rs.{{ total_price|floatformat:2 }}</h4>
+
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-20">
+        <!-- Cart table -->
+        <table class="table table-bordered text-center align-middle">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Image</th>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items %}
+            <tr>
+              <!-- Product image -->
+              <td style="width: 120px;">
+                <img src="{{ item.image }}" alt="{{ item.name }}" style="width: 100px; height: auto;" class="img-fluid rounded">
+              </td>
+              
+              <!-- Product name -->
+              <td>{{ item.name }}</td>
+              
+              <!-- Product price -->
+              <td>Rs.{{ item.price|floatformat:2 }}</td>
+              
+              <!-- Quantity update form -->
+              <td>
+                <form method="POST" action="{% url 'update_cart' item.id %}" class="d-inline-block">
+                  {% csrf_token %}
+                  <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 80px; display: inline-block;">
+                  <button type="submit" class="btn btn-warning btn-sm mt-2">Update</button>
+                </form>
+              </td>
+              
+              <!-- Total price for the item -->
+              <td>Rs.{{ item.total_price|floatformat:2 }}</td>
+              
+              <!-- Remove button -->
+              <td>
+                <form method="POST" action="{% url 'remove_from_cart' item.id %}" class="d-inline-block">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+        <div class="text-center mt-4">
+          <a href="{% url 'checkout' %}" class="btn btn-success btn-lg">Proceed to Checkout</a>
+        </div>
+      </div>
+    </div>
+    
+    {% else %}
+    <div class="col-md-12 text-center">
+      <p>Your cart is empty. <a href="{% url 'index' %}">Continue shopping</a></p>
+    </div>
+    {% endif %}
+  </div>
+</main>
+<footer id="footer" class="footer dark-background">
+  <div class="container footer-top">
+    <div class="row gy-4">
+      <div class="col-lg-5 col-md-12 footer-about">
+        <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+          <span class="sitename">Tempo</span>
+        </a>
+        <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+        <div class="social-links d-flex mt-4">
+          <a href="#"><i class="bi bi-twitter"></i></a>
+          <a href="#"><i class="bi bi-facebook"></i></a>
+          <a href="#"><i class="bi bi-instagram"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Useful Links</h4>
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li><a href="/">About us</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Terms of service</a></li>
+          <li><a href="#">Privacy policy</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-2 col-6 footer-links">
+        <h4>Our Services</h4>
+        <ul>
+          <li><a href="#">Web Design</a></li>
+          <li><a href="#">Web Development</a></li>
+          <li><a href="#">Product Management</a></li>
+          <li><a href="#">Marketing</a></li>
+          <li><a href="#">Graphic Design</a></li>
+        </ul>
+      </div>
+
+      <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+        <h4>Contact Us</h4>
+        <p>A108 Adam Street</p>
+        <p>New York, NY 535022</p>
+        <p>United States</p>
+        <p class="mt-4"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+        <p><strong>Email:</strong> <span>info@example.com</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container copyright text-center mt-4">
+    <p>© <span>Copyright</span> <strong class="px-1 sitename">Tempo</strong> <span>All Rights Reserved</span></p>
+    <div class="credits">
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+<!-- Vendor JS Files -->
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+<script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+<script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+<!-- Main JS File -->
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+</html>
